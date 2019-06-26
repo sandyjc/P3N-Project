@@ -1,0 +1,688 @@
+<html>
+	<head>	
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>P3N</title>
+        <style>
+            body { margin: 0; }
+            canvas { width: 100%; height: 100% }
+
+            ::placeholder { color: #cccccc }
+
+            #page {
+                position: absolute;
+                width: 100vw;
+                height: 100vh;
+            }
+
+            #header {
+                position: absolute;
+                top: 30px;
+                left: 30px;
+                width: 100px;
+                text-align: center;
+                color: #fff;
+                font-weight: bold;
+                background-color: rgba(0,0,0,.5);
+                z-index: 1;
+                font-size: 30px;
+                font-family: monospace;
+                display: none;
+            }
+
+            #header p {
+                font-size: 15px;
+            }
+
+            #description {
+                position: absolute;
+                top: 60px;
+                right: 60px;
+                width: 200px;
+                padding: 10px;
+                text-align: center;
+                color: #fff;
+                font-weight: normal;
+                background-color: rgba(0,0,0,.5);
+                z-index: 1;
+                font-size: 15px;
+                font-family: monospace;
+                display: none;
+            }
+
+            #information {
+                position: absolute;
+                bottom: 60px;
+                right: 60px;
+                width: 50px;
+                height: 50px;
+                padding: 10px;
+                text-align: center;
+                color: #fff;
+                font-weight: normal;
+                background-color: rgba(0,0,0,.5);
+                display: none;
+                justify-content: center;
+                align-items: center;
+                z-index: 1;
+                font-size: 15px;
+                font-family: monospace;
+                white-space: normal;
+            }
+
+        </style>
+        
+	</head>
+	<body>
+
+        <div id="page">
+            <div id="header">
+                The P3N
+                <p>Built on THREE.js</p>
+            </div>
+            <div id="description"></div>
+            <div id="information" onclick="showHelp()"></div>
+        </div>
+
+        <script src="js/three.js"></script>
+        <script src="js/require.js"></script>
+        <script src="js/OrbitControls.js"></script>
+        <script src="js/THREE.MeshLine.js"></script>
+        <script>
+            var OWNER = window.location.search.substring(1);
+            
+            if (OWNER == "") {
+                document.getElementById("page").style.backgroundColor = "#cccccc";
+                var x = document.createElement("div");
+                x.setAttribute("onclick","documentation()");
+                x.style.height = "20vh";
+                x.style.width = "60vw";
+                x.style.right = "20vw";
+                x.style.top = "10vh";
+                x.style.fontSize="10vh";
+                x.style.color = "black";
+                x.style.position = "absolute";
+                x.style.fontWeight = "bold";
+                x.style.fontFamily = "verdana";
+                x.style.textAlign = "center";
+                x.innerHTML = "The P3N"
+                document.body.appendChild(x)
+
+                var x = document.createElement("div");
+                x.style.height = "5vh";
+                x.style.width = "70vw";
+                x.style.right = "15vw";
+                x.style.top = "22.5vh";
+                x.style.fontSize="3vh";
+                x.style.color = "black";
+                x.style.position = "absolute";
+                x.style.fontFamily = "verdana";
+                x.style.textAlign = "center";
+                x.innerHTML = "\"Simple drawings taken to the next dimension\"";
+                document.body.appendChild(x)
+
+                var x = document.createElement("div");
+                x.setAttribute("onclick","draw()");
+                x.style.height = "5vh";
+                x.style.width = "10vw";
+                x.style.right = "60vw";
+                x.style.top = "50vh";
+                x.style.fontSize="3vh";
+                x.style.color = "#cccccc";
+                x.style.position = "absolute";
+                x.style.fontFamily = "verdana";
+                x.style.textAlign = "center";
+                x.style.backgroundColor="black";
+                x.style.alignItems = "center";
+                x.style.display = "flex";
+                x.style.justifyContent = "center";
+                x.innerHTML = "Drawing";
+                document.body.appendChild(x)
+
+                var x = document.createElement("div");
+                x.setAttribute("onclick","tutorial()");
+                x.style.height = "5vh";
+                x.style.width = "10vw";
+                x.style.right = "30vw";
+                x.style.top = "50vh";
+                x.style.fontSize="3vh";
+                x.style.color = "#cccccc";
+                x.style.position = "absolute";
+                x.style.fontFamily = "verdana";
+                x.style.textAlign = "center";
+                x.style.backgroundColor="black";
+                x.style.alignItems = "center";
+                x.style.display = "flex";
+                x.style.justifyContent = "center";
+                x.innerHTML = "Tutorial";
+                document.body.appendChild(x)
+                
+                var x = document.createElement("input");
+                x.setAttribute("type", "text");
+                x.setAttribute("placeholder", "Enter your username here...");
+                x.setAttribute("onkeypress","start()");
+                x.style.backgroundColor="black";
+                x.style.position = "absolute";
+                x.style.color="white";
+                x.style.height="15vh";
+                x.style.width="50vw";
+                x.style.right="25vw";
+                x.style.top="30vh";
+                x.style.fontSize="5vh";
+                x.style.fontFamily = "verdana";
+                document.body.appendChild(x);
+
+                function draw() {
+                    console.log("oije");
+                    window.location = `http://608dev.net/sandbox/sc/ykinsew/project/project.html?${x.value.toUpperCase()}`;
+                }
+
+                function tutorial() {
+                    window.location = `http://608dev.net/sandbox/sc/ykinsew/project/tutorial.html?${x.value.toUpperCase()}`;
+                }
+
+                function documentation(){
+                    window.location = "http://www.google.com";
+                }
+            } else {
+                var help = false;
+                var headerBox = document.getElementById("header");
+                headerBox.style.display = "block";
+                var informationBox = document.getElementById("information");
+                informationBox.style.display = "flex";
+                informationBox.innerHTML = "show help";
+                function showHelp() {
+                    var informationBox = document.getElementById("information");
+                    if (!help) {
+                        informationBox.innerHTML = "P3N Controls:\n\nPress right button to draw\nPress left button to say a command\nPoint forward to go in the X direction\nPoint backwards to go in the -X direction\nTilt right to go in the Y direction\nTilt left to go in the -Y direction\nTilt up to go in the Z direction\nTilt down to go in the -Z direction\n\n\nCamera Controls:\n\nDrag with one finger to rotate\nDrag with two fingers to change position\nPinch with two fingers to zoom in\nSpread with two fingers to zoom out\n\n\nVoice Commands:\n\n\"place ball size [number]\"\n\"place box size [number]\"\n\"change line color [color]\"\n\"change line size [number]\"\n\"change background color [color]\"\n\"Show grid\" \"Show axis\"\n\"Hide grid\" \"Hide axis\"";
+                        informationBox.style.height = "520px";
+                        informationBox.style.width = "400px";
+                        informationBox.style.whiteSpace = "pre";
+                        help = true;
+                    } else {
+                        informationBox.innerHTML = "show help";
+                        informationBox.style.height = "50px";
+                        informationBox.style.width = "50px";
+                        informationBox.style.whiteSpace = "normal";
+                        help = false;
+                    }
+                }
+
+                //Setup renderer
+                var renderer = new THREE.WebGLRenderer();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                document.body.appendChild( renderer.domElement );
+
+                //This will include all rendered objects
+                var image = new THREE.Object3D();
+
+                //Setup camera
+                var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
+                camera.position.set(0,0,100);
+                //This allows for rotation of camera
+                var controls = new THREE.OrbitControls(camera);
+                controls.update();
+
+                var scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xcccccc);
+                
+                //Setup new line object
+                var userToDrawCount = {};
+                var userToLine = {};
+                var userToCursor = {};
+                var userToIndex = {};
+                var userToColor = {};
+                var userToWidth = {};
+                var userToPoints = {};
+                var userToMaterial = {};
+                var userToGeometry = {};
+                var AXIS = [];
+                var GRID = [];
+                //Initialize web page with current drawing
+                init();
+
+                //Rotate all objects to isometric view
+                var angle = .1;
+                image.rotation.set(5*angle, 10*angle,0);
+
+                scene.add( image );
+                animate();
+
+                var api_index = -1;
+                doDrawingApi("0");
+                doCommandsApi("0");
+                //updateDrawing();
+                drawLine();
+                function drawLine() {
+                    setInterval(function() {
+                        for (user in userToLine) {
+                            if (userToIndex[user] < userToPoints[user].length) {
+                                userToGeometry[user].vertices.push(userToPoints[user][userToIndex[user]]);
+                                userToCursor[user].position.x = userToPoints[user][userToIndex[user]].x;
+                                userToCursor[user].position.y = userToPoints[user][userToIndex[user]].y;
+                                userToCursor[user].position.z = userToPoints[user][userToIndex[user]].z;
+                                userToIndex[user] += 1;
+                                image.remove(userToLine[user]);
+                                var line = new MeshLine();
+                                line.setGeometry( userToGeometry[user], function( p ) { return 1; });
+                                userToMaterial[user] = new MeshLineMaterial({color: userToColor[user], lineWidth: userToWidth[user]});
+                                userToLine[user] = new THREE.Mesh(line.geometry, userToMaterial[user]);
+                                image.add( userToLine[user] );
+                            }
+                        }
+                    }, 10);
+                }
+
+
+                function init() {
+                    makeAxis();
+                    makeGrid();
+
+                    userToColor["init"] = 0x999999;
+                    userToWidth["init"] = 10;
+
+                    var request = new XMLHttpRequest();
+
+                    var geometry = new THREE.Geometry();
+                    
+                    var descriptionBox = document.getElementById("description");
+                    descriptionBox.style.display = "block";
+                    descriptionBox.innerHTML = `currently loading ${OWNER}'s drawing`;
+
+                    request.open('GET', `http://608dev.net/sandbox/sc/ykinsew/project/608_server.py?owner=${OWNER}&type=init`,true);
+                    request.onload = function () {
+                        if (request.status == "200") {
+                            var request2 = new XMLHttpRequest();
+                            request2.open('GET',`http://608dev.net/sandbox/sc/ykinsew/project/608_server.py?owner=${OWNER}&type=init command`,true);
+                            request2.onload = function () {
+                                descriptionBox.innerHTML = `drawing ${OWNER}'s drawing`;
+                                var data = JSON.parse(request.response.replace(/'/g, '"'));
+                                console.log(data);
+                                var data2 = JSON.parse(request2.response.replace(/'/g, '"'));
+                                if (data['users'].length > 0 ) {
+                                    const unordered = {};
+                                    for (var i = 0; i < data['times'].length; i++) {
+                                        unordered[data['times'][i]] = {"user":data["users"][i], "drawing":data["drawing"][i], "state":data["states"][i]}
+                                    }
+                                    for (var i = 0; i < data2['times'].length; i++) {
+                                        unordered[data2['times'][i]] = {"user":data2["users"][i], "command":data2["commands"][i]}
+                                    }
+                                    const ordered = {};
+                                    Object.keys(unordered).sort().forEach(function(key) {
+                                        ordered[key] = unordered[key];
+                                    });
+                                    for (time in ordered) {
+                                        var user = ordered[time]['user'];
+                                        if (!(user in userToGeometry)) {
+                                            userToGeometry[user] = new THREE.Geometry();
+                                            userToColor[user] = new THREE.Color(0x000000);
+                                            userToWidth[user] = .1;
+                                            userToCursor[user] = makeNewCursor(user);
+                                        }
+                                        if ("drawing" in ordered[time]) {
+                                            if (ordered[time]["state"] == "DRAW") {
+                                                var newx = ordered[time]['drawing'][0];
+                                                var newy = ordered[time]['drawing'][1];
+                                                var newz = ordered[time]['drawing'][2];
+                                                userToGeometry[user].vertices.push(new THREE.Vector3(newx, newy, newz));
+                                                userToCursor[user].position.x = newx;
+                                                userToCursor[user].position.y = newy;
+                                                userToCursor[user].position.z = newz;
+                                                image.remove(userToLine[user]);
+                                                var line = new MeshLine();
+                                                line.setGeometry( userToGeometry[user], function( p ) { return 1; });
+                                                userToMaterial[user] = new MeshLineMaterial({color: userToColor[user], lineWidth: userToWidth[user]});
+                                                userToLine[user] = new THREE.Mesh(line.geometry, userToMaterial[user]);
+                                                image.add( userToLine[user] );
+                                            }
+                                            if (ordered[time]["state"] == "MOVE") {
+                                                userToGeometry[user] = new THREE.Geometry();
+                                                userToLine[user] = null;
+                                                userToCursor[user].position.x = newx;
+                                                userToCursor[user].position.y = newy;
+                                                userToCursor[user].position.z = newz;
+                                            }
+                                            if (ordered[time]["state"] == "STOP") {
+                                                userToGeometry[user] = new THREE.Geometry();
+                                            }
+                                        }
+                                        if ("command" in ordered[time]) {
+                                            doCommand(user, ordered[time]["command"].split(" "));
+                                        }
+                                    }
+                                    for (user in userToCursor) {image.remove(userToCursor[user]);}
+                                }
+                                userToDrawCount = {};
+                                userToLine = {};
+                                userToCursor = {};
+                                userToIndex = {};
+                                userToColor = {};
+                                userToWidth = {};
+                                userToPoints = {};
+                                userToMaterial = {};
+                                userToGeometry = {};
+                                descriptionBox.innerHTML = `${OWNER}'s drawing`;
+                            }
+                            request2.send();
+                        }
+                    }
+                    request.send();
+                }
+
+                function makeAxis() {
+                    var redGeometry = new THREE.Geometry();
+                    redGeometry.vertices.push(new THREE.Vector3(100,-100,-100));
+                    redGeometry.vertices.push(new THREE.Vector3(100,0,-100));
+                    var blueGeometry = new THREE.Geometry();
+                    blueGeometry.vertices.push(new THREE.Vector3(100,-100,-100));
+                    blueGeometry.vertices.push(new THREE.Vector3(0,-100,-100));
+                    var greenGeometry = new THREE.Geometry();
+                    greenGeometry.vertices.push(new THREE.Vector3(100,-100,-100));
+                    greenGeometry.vertices.push(new THREE.Vector3(100,-100,0));
+                    var redLine = new MeshLine();
+                    redLine.setGeometry( redGeometry, function (p) { return 1; } );
+                    var greenLine = new MeshLine();
+                    greenLine.setGeometry( greenGeometry, function (p) { return 1; } );
+                    var blueLine = new MeshLine();
+                    blueLine.setGeometry( blueGeometry, function (p) { return 1; } );
+                    var redMaterial = new MeshLineMaterial({lineWidth: 1.5, color: "red"});
+                    var blueMaterial = new MeshLineMaterial({lineWidth: 1.5, color: "blue"});
+                    var greenMaterial = new MeshLineMaterial({lineWidth: 1.5, color: "green"});
+                    AXIS[0] = new THREE.Mesh(redLine.geometry, redMaterial);
+                    AXIS[1] = new THREE.Mesh(blueLine.geometry, blueMaterial);
+                    AXIS[2] = new THREE.Mesh(greenLine.geometry, greenMaterial);
+                    image.add(AXIS[0]);
+                    image.add(AXIS[1]);
+                    image.add(AXIS[2]);
+                }
+
+                function makeGrid() {
+                    var size = 100;
+                    var divisions = 100;
+                    for (var i = 0; i < 3; i++) {
+                        GRID[i] = new THREE.GridHelper(size, divisions);
+                        GRID[i].visible = false;
+                        image.add(GRID[i]);
+                    }
+                    GRID[0].rotation.x = Math.PI/2;
+                    GRID[1].rotation.x = Math.PI/2;
+                    GRID[1].rotation.z = Math.PI/2;
+                }
+
+                function makeNewCursor(user) {
+                    //Setup cursor
+                    var cursorgeometry = new THREE.SphereGeometry( userToWidth[user], 32, 32 );
+                    var cursormaterial = new THREE.MeshBasicMaterial( {color: 0x000000} );
+                    var cursor = new THREE.Mesh( cursorgeometry, cursormaterial );
+                    image.add( cursor );
+                    return cursor;
+                }
+
+                //Do api call every second
+                function doDrawingApi(postTime) {
+                    var request = new XMLHttpRequest();
+                    var newPostTime = postTime;
+                    request.open('GET', `http://608dev.net/sandbox/sc/ykinsew/project/608_server.py?owner=${OWNER}&type=position&time=${postTime}`, true);
+                    request.onload = function () {
+                        if (request.status == "200") {
+                            var data = JSON.parse(request.response.replace(/'/g, '"'));
+                            console.log(data);
+                            if (data["time"] != "0") newPostTime = data["time"];
+                            if (data['points'].length > 0) {
+                                for (var i = 0; i < data['points'].length; i++) {
+                                    var user = data['users'][i];
+                                    if (!(user in userToLine)) {
+                                        userToColor[user] = new THREE.Color(0x000000);
+                                        userToWidth[user] = .1;
+                                        userToPoints[user] = [];
+                                        userToGeometry[user] = new THREE.Geometry();
+                                        userToCursor[user] = makeNewCursor(user);
+                                        userToIndex[user] = 0;
+                                        userToLine[user] = new THREE.Mesh();
+                                    }
+                                    var new_x = data['points'][i][0];
+                                    var new_y = data['points'][i][1];
+                                    var new_z = data['points'][i][2];
+                                    if (data['states'][i] == "DRAW") {
+                                        if (userToPoints[user].length > 0) {
+                                            var old_point = userToPoints[user][userToPoints[user].length-1];
+                                            var old_x = old_point.x;
+                                            var old_y = old_point.y;
+                                            var old_z = old_point.z;
+                                            var dx = (new_x - old_x)/10;
+                                            var dy = (new_y - old_y)/10;
+                                            var dz = (new_z - old_z)/10;
+                                            var x = old_x; y = old_y; z = old_z;
+                                            for (var j = 0; j <= 10; j++) {
+                                                userToPoints[user][userToPoints[user].length] = new THREE.Vector3(x,y,z);
+                                                x += dx;
+                                                y += dy;
+                                                z += dz;
+                                            }
+                                        } else {
+                                            userToPoints[user][userToPoints[user].length] = new THREE.Vector3(new_x, new_y, new_z);
+                                            userToCursor[user].position.x = new_x;
+                                            userToCursor[user].position.y = new_y;
+                                            userToCursor[user].position.z = new_z;
+                                        }
+                                    }
+                                    if (data['states'][i] == "MOVE") {
+                                        userToCursor[user].position.x = new_x;
+                                        userToCursor[user].position.y = new_y;
+                                        userToCursor[user].position.z = new_z;
+                                        userToLine[user] = null;
+                                        userToGeometry[user] = new THREE.Geometry();
+                                    }
+                                    if (data['states'][i] == "STOP") {
+                                        userToGeometry[user] = new THREE.Geometry();
+                                        userToPoints[user] = [];
+                                    }
+                                }
+                            }
+                        }
+                        doDrawingApi(newPostTime);
+                    }
+                    request.send();
+                }
+
+                function drawLine() {
+                    setInterval(function() {
+                        for (user in userToLine) {
+                            if (userToIndex[user] < userToPoints[user].length) {
+                                userToGeometry[user].vertices.push(userToPoints[user][userToIndex[user]]);
+                                userToCursor[user].position.x = userToPoints[user][userToIndex[user]].x;
+                                userToCursor[user].position.y = userToPoints[user][userToIndex[user]].y;
+                                userToCursor[user].position.z = userToPoints[user][userToIndex[user]].z;
+                                userToIndex[user] += 1;
+                                image.remove(userToLine[user]);
+                                var line = new MeshLine();
+                                line.setGeometry( userToGeometry[user], function( p ) { return 1; });
+                                userToMaterial[user] = new MeshLineMaterial({color: userToColor[user], lineWidth: userToWidth[user]});
+                                userToLine[user] = new THREE.Mesh(line.geometry, userToMaterial[user]);
+                                image.add( userToLine[user] );
+                            }
+                        }
+                    }, 10);
+                }
+
+                function drawCurve(user) {
+                    
+                }
+
+                function drawPoint(user) {
+                    userToGeometry[user].vertices.push(new THREE.Vector3(userToCursor[user].position.x,userToCursor[user].position.y,userToCursor[user].position.z));
+                    var line = new MeshLine();
+                    line.setGeometry( userToGeometry[user], function( p ) { return 1; });
+                    userToMaterial[user] = new MeshLineMaterial({color: userToColor[user], lineWidth: userToWidth[user]});
+                    image.remove(userToLine[user]);
+                    userToLine[user] = new THREE.Mesh(line.geometry, userToMaterial[user]);
+                    image.add(userToLine[user]);
+                }
+
+                function drawSphere(user, size) {
+                    var geometry = new THREE.SphereGeometry( size, 32, 32 );
+                    var material = new THREE.MeshBasicMaterial( {color: userToColor[user]} );
+                    var sphere = new THREE.Mesh( geometry, material );
+                    sphere.position.x = userToCursor[user].position.x;
+                    sphere.position.y = userToCursor[user].position.y;
+                    sphere.position.z = userToCursor[user].position.z;
+                    image.add( sphere );
+                }
+
+                function drawCube(user, size) {
+                    var geometry = new THREE.BoxGeometry( size, size, size);
+                    var material = new THREE.MeshBasicMaterial( {color: userToColor[user]} );
+                    var cube = new THREE.Mesh( geometry, material );
+                    cube.position.x = userToCursor[user].position.x;
+                    cube.position.y = userToCursor[user].position.y;
+                    cube.position.z = userToCursor[user].position.z;
+                    image.add( cube );
+                }
+
+                function animate () {
+                    requestAnimationFrame( animate );
+                    // controls.autoRotate = false;
+                    // controls.update();
+                    render();
+                }
+
+                function render () {
+                    renderer.render(scene, camera);
+                }
+
+                function doCommand(user, command) {
+                    switch(command[0]) {
+                        case "delete":
+                            image.remove(userToLine[user]);
+                            userToLine[user] = null;
+                            userToGeometry[user] = new THREE.Geometry();
+                            userToColor[user] = new THREE.Color("black");
+                            break;
+                        case "show":
+                            switch (command[1]) {
+                                case "grid":
+                                    GRID[0].visible = true;
+                                    GRID[1].visible = true;
+                                    GRID[2].visible = true;
+                                    break;
+                                case "axis":
+                                    AXIS[0].visible = true;
+                                    AXIS[1].visible = true;
+                                    AXIS[2].visible = true;
+                                    break;
+                            }
+                            break;
+                        case "hide":
+                            switch (command[1]) {
+                                case "grid":
+                                    GRID[0].visible = false;
+                                    GRID[1].visible = false;
+                                    GRID[2].visible = false;
+                                    break;
+                                case "axis":
+                                    AXIS[0].visible = false;
+                                    AXIS[1].visible = false;
+                                    AXIS[2].visible = false;
+                                    break;
+                            }
+                            break;
+                        case "change":
+                            switch(command[1]) {
+                                case "line":
+                                    switch(command[2]) {
+                                        case "color":
+                                            if (command.length >= 4) {
+                                                userToLine[user] = null;
+                                                userToGeometry[user] = new THREE.Geometry();
+                                                userToColor[user] = new THREE.Color(command[3]);
+                                            }
+                                            break;
+                                        case "size":
+                                        case "width":
+                                            if (command.length >= 4) {
+                                                userToLine[user] = null;
+                                                userToGeometry[user] = new THREE.Geometry();
+                                                userToWidth[user] = parseInt(command[3])/10.0;
+                                                if (user in userToCursor) {
+                                                    image.remove(userToCursor[user]);
+                                                    userToCursor[user] = makeNewCursor(user);
+                                                    if (user in userToPoints) {
+                                                        userToCursor[user].position.x = userToPoints[user][userToPoints[user].length-1].x;
+                                                        userToCursor[user].position.y = userToPoints[user][userToPoints[user].length-1].y;
+                                                        userToCursor[user].position.z = userToPoints[user][userToPoints[user].length-1].z;
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    break;
+                                case "background":
+                                    switch(command[2]) {
+                                        case "color":  
+                                            if (command.length >= 3) {
+                                                scene.background = new THREE.Color(command[3]);
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case "place":
+                            switch(command[1]) {
+                                case "ball":
+                                case "sphere":
+                                    if (command.length >= 3) {
+                                        drawSphere(user, parseInt(command[3]));
+                                    }
+                                    break;
+                                case "box":
+                                case "cube":
+                                    if (command.length >= 3) {
+                                        drawCube(user, parseInt(command[3]));
+                                    }
+                                    break;
+                                case "curve":
+                                    drawCurve(user);
+                                    break;
+                                case "point":
+                                    drawPoint(user);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        default:
+                            break;
+                    }
+                }
+
+                function doCommandsApi(postTime) {
+                    var request = new XMLHttpRequest();
+                    var newPostTime = postTime;
+                    request.open('GET', `http://608dev.net/sandbox/sc/ykinsew/project/608_server.py?owner=${OWNER}&type=command&time=${postTime}`, true);
+                    request.onload = function() {
+                        if (request.status == "200") {
+                            var data = JSON.parse(request.response.replace(/'/g, '"'));
+                            if (data["time"] != "0") newPostTime = data["time"];
+                            if (data["users"].length > 0) {
+                                for (var i = 0; i < data["users"].length; i++) {
+                                    var user = data["users"][i];
+                                    var command = data["commands"][i].split(" ");
+                                    doCommand(user,command);
+                                }
+                            }
+                        }
+                        doCommandsApi(newPostTime);
+                    }
+                    request.send();
+                }
+            }
+        </script>
+	</body>
+</html>
